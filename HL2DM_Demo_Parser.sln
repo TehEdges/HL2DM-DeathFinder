@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HL2DM_Demo_Parser", "HL2DM_Demo_Parser\HL2DM_Demo_Parser.csproj", "{C1135075-90E9-405B-8317-B23B9B82ACA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoTester", "DemoTester\DemoTester.csproj", "{F3AF8E85-168C-4C05-A500-2108A88D2C1C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{C1135075-90E9-405B-8317-B23B9B82ACA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1135075-90E9-405B-8317-B23B9B82ACA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1135075-90E9-405B-8317-B23B9B82ACA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3AF8E85-168C-4C05-A500-2108A88D2C1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3AF8E85-168C-4C05-A500-2108A88D2C1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3AF8E85-168C-4C05-A500-2108A88D2C1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3AF8E85-168C-4C05-A500-2108A88D2C1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

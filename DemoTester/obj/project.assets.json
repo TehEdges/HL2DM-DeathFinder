@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {}
+    "net8.0": {
+      "HL2DM_Demo_Parser/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/HL2DM_Demo_Parser.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/HL2DM_Demo_Parser.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "HL2DM_Demo_Parser/1.0.0": {
+      "type": "project",
+      "path": "../HL2DM_Demo_Parser/HL2DM_Demo_Parser.csproj",
+      "msbuildProject": "../HL2DM_Demo_Parser/HL2DM_Demo_Parser.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net8.0": []
+    "net8.0": [
+      "HL2DM_Demo_Parser >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\edge.adm\\.nuget\\packages\\": {}
@@ -13,11 +32,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\edge.adm\\Documents\\CSharp-HL2DM-DeathFinder\\HL2DM_Demo_Parser\\HL2DM_Demo_Parser.csproj",
-      "projectName": "HL2DM_Demo_Parser",
-      "projectPath": "C:\\Users\\edge.adm\\Documents\\CSharp-HL2DM-DeathFinder\\HL2DM_Demo_Parser\\HL2DM_Demo_Parser.csproj",
+      "projectUniqueName": "C:\\Users\\edge.adm\\Documents\\CSharp-HL2DM-DeathFinder\\DemoTester\\DemoTester.csproj",
+      "projectName": "DemoTester",
+      "projectPath": "C:\\Users\\edge.adm\\Documents\\CSharp-HL2DM-DeathFinder\\DemoTester\\DemoTester.csproj",
       "packagesPath": "C:\\Users\\edge.adm\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\edge.adm\\Documents\\CSharp-HL2DM-DeathFinder\\HL2DM_Demo_Parser\\obj\\",
+      "outputPath": "C:\\Users\\edge.adm\\Documents\\CSharp-HL2DM-DeathFinder\\DemoTester\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\edge.adm\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -28,7 +47,11 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\edge.adm\\Documents\\CSharp-HL2DM-DeathFinder\\HL2DM_Demo_Parser\\HL2DM_Demo_Parser.csproj": {
+              "projectPath": "C:\\Users\\edge.adm\\Documents\\CSharp-HL2DM-DeathFinder\\HL2DM_Demo_Parser\\HL2DM_Demo_Parser.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

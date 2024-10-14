@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "DemoTester/1.0.0": {
+        "dependencies": {
+          "HL2DM_Demo_Parser": "1.0.0"
+        },
+        "runtime": {
+          "DemoTester.dll": {}
+        }
+      },
+      "HL2DM_Demo_Parser/1.0.0": {
+        "runtime": {
+          "HL2DM_Demo_Parser.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "DemoTester/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "HL2DM_Demo_Parser/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
