@@ -5,18 +5,18 @@ namespace HL2DM_Demo_Parser;
 public class StringTable
 {
     public string TableName;
-    public int MaxEntries,UserDataSize, FixedUserDataSizeBits;
+    public int MaxEntries,UserDataSize, UserDataSizeBits;
     public bool isCompressed, FixedUserDataSize;
     public List<StringTableEntry> Entries;
     public List<StringTableEntry> clientEntries;
     public BitStream RawData;
 
-    public StringTable(string TableName, int MaxEntries, int UserDataSize, int FixedUserDataSizeBits, bool isCompressed, BitStream RawData)
+    public StringTable(string TableName, int MaxEntries, int UserDataSize, int UserDataSizeBits, bool isCompressed, BitStream RawData)
     {
         this.TableName = TableName;
         this.MaxEntries = MaxEntries;
         this.UserDataSize = UserDataSize;
-        this.FixedUserDataSizeBits = FixedUserDataSizeBits;
+        this.UserDataSizeBits = UserDataSizeBits;
         this.isCompressed = isCompressed;
         this.RawData = RawData;
         this.Entries = new();
@@ -69,9 +69,9 @@ public class StringTable
 
             if (RawData.ReadBoolean())
             {
-                if (this.FixedUserDataSize && this.FixedUserDataSizeBits != 0)
+                if (this.UserDataSize != 0 && this.UserDataSizeBits != 0)
                 {
-                    userData = RawData.ReadBitStream(this.FixedUserDataSizeBits);
+                    userData = RawData.ReadBitStream(this.UserDataSizeBits);
                 }
                 else
                 {

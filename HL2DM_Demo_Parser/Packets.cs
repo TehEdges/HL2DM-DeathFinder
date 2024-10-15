@@ -105,7 +105,67 @@ public class netTick : PacketBase
         this.stdDev = this.MessageData.ReadBits(16, true);
     }
 }
+public class sigOnState : PacketBase
+{
+    public int state, count;
 
+    public sigOnState (BitStream stream) : base(stream)
+    {
+
+    }
+    public override void Process()
+    {
+        this.state = this.MessageData.ReadBits(8, false);
+        this.count = this.MessageData.ReadBits(32, false);
+    }
+}
+public class fixAngle : PacketBase
+{
+    public int x,y,z;
+    public bool relative;
+
+    public fixAngle (BitStream stream) : base(stream)
+    {
+
+    }
+    public override void Process()
+    {
+        this.relative = this.MessageData.ReadBoolean();
+        this.x = this.MessageData.ReadBits(16, false);
+        this.y = this.MessageData.ReadBits(16, false);
+        this.z = this.MessageData.ReadBits(16, false);
+    }
+}
+public class setView : PacketBase
+{
+    public int index;
+
+    public setView (BitStream stream) : base(stream)
+    {
+
+    }
+    public override void Process()
+    {
+        this.index = this.MessageData.ReadBits(11, false);
+    }
+}
+public class entityMessage : PacketBase
+{
+    public int index,classid,length;
+    public BitStream data;
+
+    public entityMessage (BitStream stream) : base(stream)
+    {
+
+    }
+    public override void Process()
+    {
+        this.index = this.MessageData.ReadBits(11, true);
+        this.classid = this.MessageData.ReadBits(9, true);
+        this.length = this.MessageData.ReadBits(11, true);
+        this.data = this.MessageData.ReadBitStream(length);
+    }
+}
 public class setConVar : PacketBase
 {
     public setConVar(BitStream stream)  : base(stream)
@@ -128,7 +188,125 @@ public class setConVar : PacketBase
         }
     }
 }
+public class fileP : PacketBase
+{
+    public int transferId;
+    public string fileName;
+    public bool requested;    
+    public fileP (BitStream stream) : base (stream)
+    {
 
+    }
+    public override void Process()
+    {
+        this.transferId = this.MessageData.ReadBits(32, true);
+        this.fileName = this.MessageData.ReadASCIIString(0);
+        this.requested = this.MessageData.ReadBoolean();
+    }
+}
+public class preFetch : PacketBase
+{
+    public int index;
+    public preFetch (BitStream stream) : base (stream)
+    {
+
+    }
+    public override void Process()
+    {
+        this.index = this.MessageData.ReadBits(11, true);
+    }
+}
+public class Menu : PacketBase
+{
+    public int type, length;
+    public BitStream data;
+    public Menu (BitStream stream) : base (stream)
+    {
+
+    }
+    public override void Process()
+    {
+        this.type = this.MessageData.ReadBits(16, false);
+        this.length = this.MessageData.ReadBits(16, false);
+        this.data = this.MessageData.ReadBitStream(this.length * 8);
+    }
+}
+public class getCvarValue : PacketBase
+{
+    public int cookie;
+    public string value;
+    public getCvarValue (BitStream stream) : base (stream)
+    {
+
+    }
+    public override void Process()
+    {
+        this.cookie = this.MessageData.ReadBits(32, true);
+        this.value = this.MessageData.ReadASCIIString(0);
+    }
+}
+public class cmdKeyValues : PacketBase
+{
+    public int length;
+    public BitStream data;
+    public cmdKeyValues (BitStream stream) : base (stream)
+    {
+
+    }
+    public override void Process()
+    {
+        this.length = this.MessageData.ReadBits(32, true);
+        this.data = this.MessageData.ReadBitStream(this.length);
+    }
+}
+
+
+public class parseSounds : PacketBase
+{
+    public bool reliable;
+    public int num, length;
+    public BitStream data; 
+    public parseSounds (BitStream stream) : base (stream)
+    {
+
+    }
+    public override void Process()
+    {
+        this.reliable = this.MessageData.ReadBoolean();
+        this.num = this.reliable ? 1 : this.MessageData.ReadUint8();
+        this.length = this.reliable ? this.MessageData.ReadUint8() : this.MessageData.ReadUint16();
+        this.data = this.MessageData.ReadBitStream(length);
+    }
+}
+public class classInfo : PacketBase
+{
+    public int count;
+    public bool create;
+    public List<classInfoEntry> entries;
+    public classInfo(BitStream stream)  : base(stream)
+    {
+
+    }
+    public override void Process()
+    {
+        this.entries = new();
+        this.count = this.MessageData.ReadUint16();
+        this.create = this.MessageData.ReadBoolean();
+        if(!create)
+        {
+            int bits = (int)Math.Log2(count) + 1;
+            for(int i = 0; i < count; i++)
+            {
+                classInfoEntry entry = new();
+                entry.classId = this.MessageData.ReadBits(bits, false);
+                entry.className = this.MessageData.ReadASCIIString(0);
+                entry.dataTableName = this.MessageData.ReadASCIIString(0);
+
+                this.entries.Add(entry);
+            }
+        }
+    }
+}
 public class stringTablePackets : PacketBase
 {
     GameState State;
@@ -174,7 +352,7 @@ public class stringTablePackets : PacketBase
 
             SnappyDecompressor decompressor = new(compressedData);
             byte [] decompdata = new byte[decompbytesize];
-            decompressor.Uncompress(compressedData);
+            decompdata = decompressor.Uncompress(compressedData);
             BitView bv = new(decompdata, 0, decompdata.Length);
             tabledata = new(bv, 0, bv.view.Length);
         }
@@ -184,14 +362,11 @@ public class stringTablePackets : PacketBase
         temptable.ProcessStringTable(this.entitycount);
     }
 }
-
-
 public class Property
 {
     public string Name { get; set; }
     public string Value { get; set; }
 }
-
 public class PacketParser
 {
     BitStream messageData;

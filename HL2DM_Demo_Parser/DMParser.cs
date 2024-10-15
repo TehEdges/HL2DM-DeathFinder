@@ -2,7 +2,7 @@ using System;
 
 namespace HL2DM_Demo_Parser;
 
-enum MessageTypeID
+public enum MessageTypeID
 {
     Sigon = 1,
     Packet = 2,
@@ -27,6 +27,9 @@ public class DMParser
 
         this.Header = new DemoHeader(this.Stream);
         this.Messages = new List<Message>();
+        this.State = new();
+        this.State.GameEventList = new();
+        this.State.UserMessages = new();
 
         this.GetMessages();
         this.ProcessMessages();
@@ -40,11 +43,11 @@ public class DMParser
             switch(MessageType)
             {
                 case MessageTypeID.Sigon:
-                    this.Messages.Add(this.ProcessPacket());
+                    this.Messages.Add(this.ProcessPacket(MessageType));
                     break;
                     
                 case MessageTypeID.Packet:
-                     this.Messages.Add(this.ProcessPacket());
+                     this.Messages.Add(this.ProcessPacket(MessageType));
                     break;
 
                 case MessageTypeID.SyncTick:
@@ -74,13 +77,14 @@ public class DMParser
 
     }
 
-    private Message ProcessPacket()
+    private Message ProcessPacket(MessageTypeID messageType)
     {
         Message message = new();
         
         this.Stream._index += 704; // Skip Preamble stuff
         message.Length = this.Stream.ReadInt32();
         message.MessageData = this.Stream.ReadBitStream(message.Length * 8);
+        message.MessageType = messageType;
 
         return message;
     }
@@ -89,6 +93,7 @@ public class DMParser
     {
         Message message = new();
         message.TickNumber = this.Stream.ReadInt32();
+        message.MessageType = MessageTypeID.SyncTick;
         return message;
     }
 
@@ -98,7 +103,7 @@ public class DMParser
         message.TickNumber = this.Stream.ReadInt32();
         message.Length = this.Stream.ReadInt32();
         message.MessageData = this.Stream.ReadBitStream(message.Length * 8);
-
+        message.MessageType = MessageTypeID.ConsoleCmd;
         return message;
     }
 
@@ -108,7 +113,7 @@ public class DMParser
         message.TickNumber = this.Stream.ReadInt32();
         message.Length = this.Stream.ReadInt32();
         message.MessageData = this.Stream.ReadBitStream(message.Length * 8);
-
+        message.MessageType = MessageTypeID.UserCmd;
         return message;
     }
 
@@ -118,7 +123,7 @@ public class DMParser
         message.TickNumber = this.Stream.ReadInt32();
         message.Length = this.Stream.ReadInt32();
         message.MessageData = this.Stream.ReadBitStream(message.Length * 8);
-
+        message.MessageType = MessageTypeID.StringTables;
         return message;
     }
 
@@ -128,6 +133,7 @@ public class DMParser
         message.TickNumber = this.Stream.ReadInt32();
         message.Length = this.Stream.ReadInt32();
         message.MessageData = this.Stream.ReadBitStream(message.Length * 8);
+        message.MessageType = MessageTypeID.DataTables;
 
         return message;
     }
@@ -136,7 +142,10 @@ public class DMParser
     {
         foreach(Message message in this.Messages)
         {
-            message.ParsePackets(this.State);
+            if(message.MessageType == MessageTypeID.Packet || message.MessageType == MessageTypeID.Sigon)
+            {
+                message.ParsePackets(this.State);
+            }
         }
     }
 }

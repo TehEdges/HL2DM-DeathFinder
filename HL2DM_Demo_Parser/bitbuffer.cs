@@ -400,4 +400,21 @@ public class BitStream
         }
     }
 
+    public double ReadBitCoord(BitStream stream)
+    {
+        bool hasIntVal = stream.ReadBoolean();
+        bool hasFractVal = stream.ReadBoolean();
+
+        if (hasIntVal || hasFractVal)
+        {
+            bool isNegative = stream.ReadBoolean();
+            int intVal = hasIntVal ? stream.ReadBits(14, false) + 1 : 0;
+            int fractVal = hasFractVal ? stream.ReadBits(5, false) : 0;
+            double value = intVal + fractVal * (1.0 / 32.0);
+
+            return isNegative ? -value : value;
+        }
+
+        return 0.0;
+    }
 }
