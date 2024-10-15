@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HL2DM_Demo_Parser")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+05f3c499004176f4dbaf604fb4786c43fb263b74")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+25ec79b80f1c1fb99db7b323eaddffe1b7d06fe9")]
 [assembly: System.Reflection.AssemblyProductAttribute("HL2DM_Demo_Parser")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HL2DM_Demo_Parser")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

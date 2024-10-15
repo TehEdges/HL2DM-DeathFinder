@@ -17,6 +17,7 @@ public class DMParser
 {
     public DemoHeader Header;
     public BitStream Stream;
+    public GameState State;
     public System.Collections.Generic.List<Message> Messages;
     public DMParser(string filePath)
     {
@@ -28,6 +29,7 @@ public class DMParser
         this.Messages = new List<Message>();
 
         this.GetMessages();
+        this.ProcessMessages();
     }
 
     private void GetMessages()
@@ -128,5 +130,13 @@ public class DMParser
         message.MessageData = this.Stream.ReadBitStream(message.Length * 8);
 
         return message;
+    }
+
+    public void ProcessMessages()
+    {
+        foreach(Message message in this.Messages)
+        {
+            message.ParsePackets(this.State);
+        }
     }
 }

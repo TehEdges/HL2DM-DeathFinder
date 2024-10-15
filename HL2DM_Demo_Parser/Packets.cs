@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 namespace HL2DM_Demo_Parser;
 
@@ -37,6 +38,11 @@ public abstract class PacketBase
 {
     public BitStream MessageData;
     public abstract void Process();
+
+    public PacketBase(BitStream stream)
+    {
+        this.MessageData = stream;
+    }
 }
 
 public class serverInfo : PacketBase
@@ -58,9 +64,8 @@ public class serverInfo : PacketBase
     public string ServerName { get; set; }
     public bool Replay { get; set; }
 
-    public serverInfo(BitStream stream)
+    public serverInfo(BitStream stream) : base(stream) // Pass the BitStream to the base constructor
     {
-        this.MessageData = stream;
     }
     public override void Process()
     {
@@ -73,6 +78,7 @@ public class serverInfo : PacketBase
         this.MapHash = this.MessageData.ReadBits(128, true);
         this.PlayerCount = this.MessageData.ReadBits(8, true);
         this.MaxPlayerCount = this.MessageData.ReadBits(8, true);
+        this.IntervalPerTick = this.MessageData.ReadFloat32();
         this.Platform = this.MessageData.ReadASCIIString(1);
         this.Game = this.MessageData.ReadUTF8String(0);
         this.Map = this.MessageData.ReadUTF8String(0);
@@ -82,8 +88,118 @@ public class serverInfo : PacketBase
     }
 }
 
+public class netTick : PacketBase
+{
+    public int tick {get;set;}
+    public int frametime{get;set;}
+    public int stdDev{get;set;}
+
+    public netTick (BitStream stream) : base(stream)
+    {
+
+    }
+    public override void Process()
+    {
+        this.tick = this.MessageData.ReadBits(32, true);
+        this.frametime = this.MessageData.ReadBits(16, true);
+        this.stdDev = this.MessageData.ReadBits(16, true);
+    }
+}
+
+public class setConVar : PacketBase
+{
+    public setConVar(BitStream stream)  : base(stream)
+    {}
+    public List<Property> convars;
+    public int count;
+
+    public override void Process()
+    {
+        this.convars = new();
+        this.count = this.MessageData.ReadUint8();
+        for(int i =0; i < count; i++)
+        {
+            string key = this.MessageData.ReadUTF8String(0);
+            string value = this.MessageData.ReadUTF8String(0);
+            Property tprop = new();
+            tprop.Name = key;
+            tprop.Value = value;
+            this.convars.Add(tprop);
+        }
+    }
+}
+
+public class stringTablePackets : PacketBase
+{
+    GameState State;
+    public string TableName;
+    public int maxEntries, encodedbits, entitycount, bitcount, userdatasize, userdatasizebits;
+    bool UserDataFixedSize, isCompressed;
+    StringTable Table;
+
+    public stringTablePackets(BitStream stream, GameState State) : base(stream)
+    {
+        this.State = State;
+    }
+
+    public override void Process()
+    {
+        this.TableName = this.MessageData.ReadASCIIString(0);
+        this.maxEntries = this.MessageData.ReadUint16();
+        this.encodedbits = (int)Math.Log2(this.maxEntries);
+        this.entitycount = this.MessageData.ReadBits(this.encodedbits + 1, false);
+        this.bitcount = this.MessageData.ReadVarInt(false);
+        this.UserDataFixedSize = this.MessageData.ReadBoolean();
+
+        //If our user data is a fixed size, then read the size.
+        if(this.UserDataFixedSize)
+        {
+            this.userdatasize = this.MessageData.ReadBits(12, false);
+            this.userdatasizebits = this.MessageData.ReadBits(4, false);
+        }
+        this.isCompressed = this.MessageData.ReadBoolean();
+
+        BitStream tabledata = this.MessageData.ReadBitStream(this.bitcount);
+        if(this.isCompressed)
+        {
+            int decompbytesize = (int)tabledata.ReadUint32();
+            int compbytesize = (int)tabledata.ReadUint32();
+            string magic = tabledata.ReadASCIIString(4);
+            byte[] compressedData = tabledata.ReadArrayBuffer(compbytesize - 4);
+
+            if(magic != "SNAP")
+            {
+                throw new SystemException("Unknown compressed stringtable format");
+            }
+
+            SnappyDecompressor decompressor = new(compressedData);
+            byte [] decompdata = new byte[decompbytesize];
+            decompressor.Uncompress(compressedData);
+            BitView bv = new(decompdata, 0, decompdata.Length);
+            tabledata = new(bv, 0, bv.view.Length);
+        }
+
+
+        StringTable temptable = new(this.TableName, this.maxEntries, this.userdatasize, this.userdatasizebits, this.isCompressed, tabledata);
+        temptable.ProcessStringTable(this.entitycount);
+    }
+}
+
+
 public class Property
 {
     public string Name { get; set; }
-    public string Type { get; set; }
+    public string Value { get; set; }
+}
+
+public class PacketParser
+{
+    BitStream messageData;
+
+    public PacketParser(BitStream stream)
+    {
+        this.messageData = stream;
+    }
+
+
 }

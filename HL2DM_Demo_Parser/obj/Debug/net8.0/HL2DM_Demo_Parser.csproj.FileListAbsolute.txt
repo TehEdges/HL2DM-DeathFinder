@@ -21,3 +21,4 @@ C:\Users\edge.adm\Documents\CSharp-HL2DM-DeathFinder\HL2DM_Demo_Parser\obj\Debug
 C:\Users\edge.adm\Documents\CSharp-HL2DM-DeathFinder\HL2DM_Demo_Parser\obj\Debug\net8.0\refint\HL2DM_Demo_Parser.dll
 C:\Users\edge.adm\Documents\CSharp-HL2DM-DeathFinder\HL2DM_Demo_Parser\obj\Debug\net8.0\HL2DM_Demo_Parser.pdb
 C:\Users\edge.adm\Documents\CSharp-HL2DM-DeathFinder\HL2DM_Demo_Parser\obj\Debug\net8.0\ref\HL2DM_Demo_Parser.dll
+D:\Coding\CSharp-HL2DM-DeathFinder\HL2DM_Demo_Parser\obj\Debug\net8.0\HL2DM_Demo_Parser.sourcelink.json

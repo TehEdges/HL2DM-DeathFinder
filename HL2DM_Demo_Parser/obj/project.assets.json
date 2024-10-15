@@ -8,23 +8,26 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\edge.adm\\.nuget\\packages\\": {}
+    "C:\\Users\\edge\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\edge.adm\\Documents\\CSharp-HL2DM-DeathFinder\\HL2DM_Demo_Parser\\HL2DM_Demo_Parser.csproj",
+      "projectUniqueName": "D:\\Coding\\CSharp-HL2DM-DeathFinder\\HL2DM_Demo_Parser\\HL2DM_Demo_Parser.csproj",
       "projectName": "HL2DM_Demo_Parser",
-      "projectPath": "C:\\Users\\edge.adm\\Documents\\CSharp-HL2DM-DeathFinder\\HL2DM_Demo_Parser\\HL2DM_Demo_Parser.csproj",
-      "packagesPath": "C:\\Users\\edge.adm\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\edge.adm\\Documents\\CSharp-HL2DM-DeathFinder\\HL2DM_Demo_Parser\\obj\\",
+      "projectPath": "D:\\Coding\\CSharp-HL2DM-DeathFinder\\HL2DM_Demo_Parser\\HL2DM_Demo_Parser.csproj",
+      "packagesPath": "C:\\Users\\edge\\.nuget\\packages\\",
+      "outputPath": "D:\\Coding\\CSharp-HL2DM-DeathFinder\\HL2DM_Demo_Parser\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\edge.adm\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\edge\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
