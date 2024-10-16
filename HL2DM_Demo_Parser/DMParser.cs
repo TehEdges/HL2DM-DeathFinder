@@ -30,11 +30,14 @@ public class DMParser
         this.State = new();
         this.State.GameEventList = new();
         this.State.UserMessages = new();
+        this.State.stringTables = new();
+        this.State.Events = new();
 
         this.GetMessages();
         this.ProcessMessages();
+        this.State.ProcessStringTables();
+        this.State.ProcessPlayerDeaths();
     }
-
     private void GetMessages()
     {
         while(this.Stream.BitsLeft > 8)

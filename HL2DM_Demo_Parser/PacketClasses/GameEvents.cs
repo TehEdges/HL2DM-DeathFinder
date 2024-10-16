@@ -43,10 +43,10 @@ public class GameEventList  :   PacketBase
             int id = this.listData.ReadBits(9, false);
             string name = this.listData.ReadASCIIString(0);
             int type = this.listData.ReadBits(3, false);
-            List<GameEventEntry> Entries = new();
+            List<GameEventEntryDefiition> Entries = new();
             while(type != 0)
             {
-                GameEventEntry Entry = new();
+                GameEventEntryDefiition Entry = new();
                 Entry.Type = (GameEventValueType)type;
                 Entry.Name = this.listData.ReadASCIIString(0);
                 Entries.Add(Entry);
@@ -58,22 +58,27 @@ public class GameEventList  :   PacketBase
     }
 }
 
-public class GameEventEntry
+public class GameEventEntryDefiition
 {
     public string Name;
     public GameEventValueType Type;
 }
-public class GameEvent  :   PacketBase
+
+public class GameEvent
 {
     public GameEventTypes GameEventType;
-    public Dictionary<string, object> Values;
+    public Dictionary<string, object> Values = new();
+}
+
+public class GameEventPacket  :   PacketBase
+{
+    public GameEventTypes GameEventType;
     public GameState state;
     public int length, eventtype;
     public BitStream eventData;
-    public GameEvent(BitStream stream, GameState state) : base(stream)
+    public GameEventPacket(BitStream stream, GameState state) : base(stream)
     {
         this.state = state;
-        this.Values = new();
     }
 
     public override void Process()
@@ -83,24 +88,29 @@ public class GameEvent  :   PacketBase
         this.eventtype = this.eventData.ReadBits(9, false);
         if(this.state.GameEventList.TryGetValue(this.eventtype, out object[] evententry))
         {
+            GameEvent gameEvent = new();
+            gameEvent.GameEventType = (GameEventTypes)this.eventtype;
             foreach(var entry in evententry)
             {
-                if(entry is List<GameEventEntry> gameEventEntries)
+                if(entry is List<GameEventEntryDefiition> gameEventEntries)
                 {
                     foreach(var gameEventEntry in gameEventEntries)
                     {
                         var value = this.GetGameEventValue(gameEventEntry);
                         if(value is not null)
                         {
-                            Values.Add(gameEventEntry.Name, value);
+                            gameEvent.Values.Add(gameEventEntry.Name, value);
+                            
                         }
                     }
                 }
             }
-        }
+            gameEvent.Values.Add("tick", this.state.tick);
+            this.state.Events.Add(gameEvent);
+        }       
     }
 
-    private object GetGameEventValue(GameEventEntry gameEventEntry)
+    private object GetGameEventValue(GameEventEntryDefiition gameEventEntry)
     {
         switch(gameEventEntry.Type)
         {

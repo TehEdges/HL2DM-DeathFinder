@@ -10,9 +10,9 @@ public class Message
     public List<PacketBase> Packets;
     public MessageTypeID MessageType;
 
-    public List<PacketBase> ParsePackets(GameState State)
+    public void ParsePackets(GameState State)
     {
-        List<PacketBase> Packets = new();
+        this.Packets = new();
         
         while(this.MessageData.BitsLeft > 6)
         {
@@ -29,6 +29,11 @@ public class Message
                 case PacketTypeId.netTick:
                     netTick netTickPacket = new(this.MessageData);
                     netTickPacket.Process();
+                    if(State.starttick == 0)
+                    {
+                        State.starttick = netTickPacket.tick;
+                    }
+                    State.tick = netTickPacket.tick;
                     Packets.Add(netTickPacket);
                     break;
 
@@ -141,9 +146,36 @@ public class Message
                     break;
                 
                 case PacketTypeId.gameEvent:
-                    GameEvent gameEventPacket = new(this.MessageData, State);
+                    GameEventPacket gameEventPacket = new(this.MessageData, State);
                     gameEventPacket.Process();
                     Packets.Add(gameEventPacket);
+                    break;
+                
+                case PacketTypeId.updateStringTable:
+                    updateStringTable updateStringTablePacket = new(this.MessageData, State);
+                    updateStringTablePacket.Process();
+                    Packets.Add(updateStringTablePacket);
+                    break;
+
+                case PacketTypeId.packetEntities:
+                    PacketEntities packetEntitiesPacket = new(this.MessageData);
+                    packetEntitiesPacket.Process();
+                    Packets.Add(packetEntitiesPacket);
+                    break;
+                
+                case PacketTypeId.tempEntities:
+                    tempEntities tempEntitiesPacket = new(this.MessageData);
+                    tempEntitiesPacket.Process();
+                    Packets.Add(tempEntitiesPacket);
+                    break;
+
+                case PacketTypeId.setPause:
+                    setPause setPausePacket = new(this.MessageData);
+                    setPausePacket.Process();
+                    Packets.Add(setPausePacket);
+                    break;
+
+                case PacketTypeId.unknown:
                     break;
 
                 default:
@@ -151,6 +183,6 @@ public class Message
             }
         }
 
-        return Packets;
+        //this.Packets.AddRange(Packets);
     }
 }
