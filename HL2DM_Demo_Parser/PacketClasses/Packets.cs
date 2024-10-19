@@ -97,6 +97,16 @@ public class setPause(BitStream stream) : PacketBase(stream)
         this.paused = this.MessageData.ReadBoolean();
     }
 }
+public class stringCmd(BitStream stream) : PacketBase(stream)
+{
+    public Property command = new();
+
+    public override void Process()
+    {
+        this.command.Name = "value";
+        this.command.Value = this.MessageData.ReadASCIIString(0);
+    }
+}
 
 public class netTick : PacketBase
 {

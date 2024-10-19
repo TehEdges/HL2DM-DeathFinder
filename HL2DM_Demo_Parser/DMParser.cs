@@ -36,7 +36,9 @@ public class DMParser
         this.GetMessages();
         this.ProcessMessages();
         this.State.ProcessStringTables();
+        //Console.Write(System.Text.Json.JsonSerializer.Serialize(this.State.GameEventList));
         this.State.ProcessPlayerDeaths();
+        
     }
     private void GetMessages()
     {
@@ -147,7 +149,14 @@ public class DMParser
         {
             if(message.MessageType == MessageTypeID.Packet || message.MessageType == MessageTypeID.Sigon)
             {
-                message.ParsePackets(this.State);
+                try
+                {
+                    message.ParsePackets(this.State);
+                }
+                catch
+                {
+                    
+                }
             }
         }
     }

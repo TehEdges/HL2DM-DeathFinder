@@ -57,11 +57,11 @@ public class GameEventList  :   PacketBase
         }
     }
 }
-
+[Serializable]
 public class GameEventEntryDefiition
 {
-    public string Name;
-    public GameEventValueType Type;
+    public string Name {get; set;}
+    public GameEventValueType Type {get; set;}
 }
 
 public class GameEvent
@@ -86,6 +86,11 @@ public class GameEventPacket  :   PacketBase
         this.length = this.MessageData.ReadBits(11, false);
         this.eventData = this.MessageData.ReadBitStream(this.length);
         this.eventtype = this.eventData.ReadBits(9, false);
+        //Ensure Gamestate contains at least our base information
+        if(this.state.GameEventList.Count == 0)
+        {
+            this.state.UseBaseGameState();
+        }
         if(this.state.GameEventList.TryGetValue(this.eventtype, out object[] evententry))
         {
             GameEvent gameEvent = new();

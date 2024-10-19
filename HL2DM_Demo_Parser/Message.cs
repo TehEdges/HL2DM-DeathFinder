@@ -175,6 +175,12 @@ public class Message
                     Packets.Add(setPausePacket);
                     break;
 
+                case PacketTypeId.stringCmd:
+                    stringCmd stringCmdPacket = new(this.MessageData);
+                    stringCmdPacket.Process();
+                    Packets.Add(stringCmdPacket);
+                    break;
+
                 case PacketTypeId.unknown:
                     break;
 
