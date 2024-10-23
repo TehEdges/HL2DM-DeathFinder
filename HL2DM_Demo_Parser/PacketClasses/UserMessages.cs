@@ -81,7 +81,57 @@ public class UserMessage    :   PacketBase
         this.length = this.MessageData.ReadBits(11, false);
         this.usrmsgData = this.MessageData.ReadBitStream(length); 
 
-        object[] usrMsgPacket = new object[] {msgType, length, usrmsgData};
-        this.state.UserMessages.Add(usrMsgPacket);
+        //object[] usrMsgPacket = new object[] {msgType, length, usrmsgData};
+        this.state.UserMessages.Add(this);
     }
+}
+
+
+public class SayText2Msg	: PacketBase
+{
+	public int client, raw, pos;
+	public  string from, text, kind;
+	public SayText2Msg(BitStream stream) : base(stream)
+	{}
+    public override void Process()
+    {
+		this.client = this.MessageData.ReadUint8();
+		this.raw = this.MessageData.ReadUint8();
+		this.pos = this.MessageData.Index;
+        if(this.MessageData.ReadUint8() == 1)
+		{
+			int first = this.MessageData.ReadUint8();
+			if(first == 7)
+			{
+				string color = this.MessageData.ReadUTF8String(6);
+			}
+			else
+			{
+				this.MessageData._index = this.pos + 8;
+			}
+			this.text = this.MessageData.ReadUTF8String(0);
+			if(this.text.Substring(0, 6) == "*DEAD*")
+			{
+				int start = this.text.IndexOf("\u0003");
+				int end = this.text.IndexOf("\u0001");
+				this.from = this.text.Substring(start + 1, end - start - 1);
+				this.text = this.text.Substring(end + 5);
+				this.kind = "HL2MP_Chat_AllDead";
+			}
+		}
+		else
+		{
+			this.MessageData.Index = this.pos;
+			this.kind = this.MessageData.ReadUTF8String(0);
+			this.from = this.MessageData.ReadUTF8String(0);
+			this.text = this.MessageData.ReadUTF8String(0);
+			//Null bytes at the end of the text stream
+			this.MessageData.ReadUint16();
+		}
+
+		this.text = this.text.Replace("\u0001", "");
+		this.text = this.text.Replace("\u0003", "");
+		int stringpos = this.text.IndexOf("\u0007");
+    }
+
 }

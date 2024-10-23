@@ -8,10 +8,11 @@ public class GameState
     public int Version, tick, starttick, tickoffset, pausestarttick;
     public List<StringTable> stringTables;
     public Dictionary<int, object[]> GameEventList;
-    public List<object[]> UserMessages;
+    public List<UserMessage> UserMessages;
     public List<GameEvent> Events;
     public List<UserInfo> userInfo = new();
     public List<DeathEvent> Deaths = new();
+    public List<SayText2Msg>Chat = new();
 
     public void ProcessStringTables(StringTable Table)
     {

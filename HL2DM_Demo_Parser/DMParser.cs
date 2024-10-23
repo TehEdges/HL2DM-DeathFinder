@@ -1,4 +1,5 @@
 using System;
+using HL2DM_Demo_Parser.PacketClasses;
 
 namespace HL2DM_Demo_Parser;
 
@@ -35,11 +36,13 @@ public class DMParser
 
         this.GetMessages();
         this.ProcessMessages();
+        this.ProcessText();
         
     }
     private void GetMessages()
     {
-        while(this.Stream.BitsLeft > 8)
+        bool stop = false;
+        while(this.Stream.BitsLeft > 8 && stop == false)
         {
             MessageTypeID MessageType = (MessageTypeID)this.Stream.ReadUint8();
             switch(MessageType)
@@ -69,6 +72,7 @@ public class DMParser
                     break;
 
                 case MessageTypeID.Stop:
+                    stop = true;
                     break; 
                 
                 case MessageTypeID.StringTables:
@@ -84,7 +88,9 @@ public class DMParser
         Message message = new();
         
         message.TickNumber = this.Stream.ReadInt32();
-        this.Stream._index += 672; // Skip Preamble stuff
+        this.Stream._index += 608; // Skip Preamble stuff
+        message.SequenceIn = this.Stream.ReadInt32();
+        message.SequenceOut = this.Stream.ReadInt32();
         message.Length = this.Stream.ReadInt32();
         message.MessageData = this.Stream.ReadBitStream(message.Length * 8);
         message.MessageType = messageType;
@@ -155,6 +161,19 @@ public class DMParser
                 {
                     
                 }
+            }
+        }
+    }
+
+    public void ProcessText()
+    {
+        foreach(UserMessage packet in this.State.UserMessages)
+        {
+            if(packet.msgType == UserMessageType.SayText2)
+            {
+                SayText2Msg MsgPacket = new(packet.usrmsgData);
+                MsgPacket.Process();
+                this.State.Chat.Add(MsgPacket);
             }
         }
     }

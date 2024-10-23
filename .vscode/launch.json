@@ -1,24 +1,15 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "C/C++ Runner: Debug Session",
-      "type": "cppdbg",
-      "request": "launch",
-      "args": [],
-      "stopAtEntry": false,
-      "externalConsole": true,
-      "cwd": "d:/Coding/CSharp-HL2DM-DeathFinder/HL2DM_Demo_Parser/obj",
-      "program": "d:/Coding/CSharp-HL2DM-DeathFinder/HL2DM_Demo_Parser/obj/build/Debug/outDebug",
-      "MIMode": "gdb",
-      "miDebuggerPath": "gdb",
-      "setupCommands": [
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
         {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
+            "name": "C#: DemoTester Debug",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/demotester/bin/Debug/net8.0/DemoTester.exe",
+            "args": ["C:\\temp\\demos", "C:\\temp\\csvs"]
         }
-      ]
-    }
-  ]
+    ]
 }

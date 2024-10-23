@@ -13,8 +13,8 @@ public class Message
     public void ParsePackets(GameState State)
     {
         this.Packets = new();
-        
-        while(this.MessageData.BitsLeft > 6)
+        bool skipremaining = false;
+        while(this.MessageData.BitsLeft > 6 && skipremaining == false)
         {
             //Determine packet type by reading the first 6 bits
             PacketTypeId PacketType = (PacketTypeId)this.MessageData.ReadBits(6, false);
@@ -182,6 +182,10 @@ public class Message
                     break;
 
                 case PacketTypeId.unknown:
+                    break;
+
+                case PacketTypeId.brokenPacket:
+                    skipremaining = true;
                     break;
 
                 default:

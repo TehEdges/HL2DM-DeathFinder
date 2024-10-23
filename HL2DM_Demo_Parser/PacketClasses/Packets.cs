@@ -31,7 +31,8 @@ public enum PacketTypeId {
 	menu = 29,
 	gameEventList = 30,
 	getCvarValue = 31,
-	cmdKeyValues = 32
+	cmdKeyValues = 32,
+    brokenPacket = 42
 }
 
 public abstract class PacketBase
@@ -442,7 +443,8 @@ public class updateStringTable  :   PacketBase
         temptable.RawData = this.data;
         temptable.ProcessStringTable(changedEntries, temptable.Entries);
 
-        this.state.stringTables[this.tableid] = temptable;       
+        this.state.stringTables[this.tableid] = temptable;
+        this.state.ProcessStringTables(temptable);       
     }
 }
 
