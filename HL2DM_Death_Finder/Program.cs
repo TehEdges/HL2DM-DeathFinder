@@ -33,6 +33,8 @@ else
             string msgtext = $"{msg.kind}, {msg.from}, {msg.text}";
             csvWriter.WriteLine(msgtext);
         }
+        csvWriter.Flush();
+        csvWriter.Close();
     }
 }
 

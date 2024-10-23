@@ -8,7 +8,7 @@
             "name": "C#: DemoTester Debug",
             "type": "coreclr",
             "request": "launch",
-            "program": "${workspaceFolder}/demotester/bin/Debug/net8.0/DemoTester.exe",
+            "program": "${workspaceFolder}/HL2DM_Death_Finder/bin/Debug/net8.0/HL2DM_Death_Finder.exe",
             "args": ["C:\\temp\\demos", "C:\\temp\\csvs"]
         }
     ]
