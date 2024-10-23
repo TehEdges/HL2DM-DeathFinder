@@ -1,4 +1,4 @@
-Add-Type -Path .\HL2DM_Demo_Parser\bin\Debug\net8.0\HL2DM_Demo_Parser.dll
+Add-Type -Path .\HL2DM_Demo_Parser.dll
 
 
 $Demos = gci "C:\temp\demos"
