@@ -170,7 +170,7 @@ public class Message
                     break;
 
                 case PacketTypeId.setPause:
-                    setPause setPausePacket = new(this.MessageData);
+                    setPause setPausePacket = new(this.MessageData, State, this.TickNumber);
                     setPausePacket.Process();
                     Packets.Add(setPausePacket);
                     break;

@@ -35,9 +35,6 @@ public class DMParser
 
         this.GetMessages();
         this.ProcessMessages();
-        this.State.ProcessStringTables();
-        //Console.Write(System.Text.Json.JsonSerializer.Serialize(this.State.GameEventList));
-        this.State.ProcessPlayerDeaths();
         
     }
     private void GetMessages()
@@ -86,7 +83,8 @@ public class DMParser
     {
         Message message = new();
         
-        this.Stream._index += 704; // Skip Preamble stuff
+        message.TickNumber = this.Stream.ReadInt32();
+        this.Stream._index += 672; // Skip Preamble stuff
         message.Length = this.Stream.ReadInt32();
         message.MessageData = this.Stream.ReadBitStream(message.Length * 8);
         message.MessageType = messageType;

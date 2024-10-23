@@ -110,7 +110,11 @@ public class GameEventPacket  :   PacketBase
                     }
                 }
             }
-            gameEvent.Values.Add("tick", this.state.tick);
+            gameEvent.Values.Add("tick", this.state.tick - this.state.tickoffset);
+            if(gameEvent.GameEventType == GameEventTypes.player_death)
+            {
+                this.state.ProcessPlayerDeaths(gameEvent);
+            }
             this.state.Events.Add(gameEvent);
         }       
     }

@@ -5,7 +5,7 @@ namespace HL2DM_Demo_Parser;
 
 public class GameState
 {
-    public int Version, tick, starttick;
+    public int Version, tick, starttick, tickoffset, pausestarttick;
     public List<StringTable> stringTables;
     public Dictionary<int, object[]> GameEventList;
     public List<object[]> UserMessages;
@@ -13,46 +13,44 @@ public class GameState
     public List<UserInfo> userInfo = new();
     public List<DeathEvent> Deaths = new();
 
-    public void ProcessStringTables()
+    public void ProcessStringTables(StringTable Table)
     {
-        StringTable userInfoTable = stringTables.FirstOrDefault(table => table.TableName == "userinfo");
-        if(userInfoTable != null)
+        switch(Table.TableName)
         {
-            foreach(StringTableEntry Entry in userInfoTable.Entries)
-            {
-                CalculateUserInfoFromEntry(Entry.text, Entry.extraData);
-            }
+            case "userinfo":
+                foreach(StringTableEntry Entry in Table.Entries)
+                {
+                    CalculateUserInfoFromEntry(Entry.text, Entry.extraData);
+                }
+                break;
         }
     }
 
-    public void ProcessPlayerDeaths()
+    public void ProcessPlayerDeaths(GameEvent Event)
     {
-        foreach(GameEvent Event in this.Events)
+        if(Event.GameEventType == GameEventTypes.player_death)
         {
-            if(Event.GameEventType == GameEventTypes.player_death)
+            DeathEvent deathEvent = new();
+            Event.Values.TryGetValue("userid", out object victimid);
+            Event.Values.TryGetValue("attacker", out object attackerid);
+            Event.Values.TryGetValue("weapon", out object weapon);
+            Event.Values.TryGetValue("headshot", out object headshot);
+            Event.Values.TryGetValue("tick", out object tick);
+            UserInfo victim = this.userInfo.FirstOrDefault(u => u.UserId == (int)victimid);
+            deathEvent.victim = victim.Name.Replace("\0", "");
+            if((int)attackerid != 0)
             {
-                DeathEvent deathEvent = new();
-                Event.Values.TryGetValue("userid", out object victimid);
-                Event.Values.TryGetValue("attacker", out object attackerid);
-                Event.Values.TryGetValue("weapon", out object weapon);
-                Event.Values.TryGetValue("headshot", out object headshot);
-                Event.Values.TryGetValue("tick", out object tick);
-                UserInfo victim = this.userInfo.FirstOrDefault(u => u.UserId == (int)victimid);
-                deathEvent.victim = victim.Name.Replace("\0", "");
-                if((int)attackerid != 0)
-                {
-                    UserInfo attacker = this.userInfo.FirstOrDefault(u => u.UserId == (int)attackerid);
-                    deathEvent.attacker = attacker.Name.Replace("\0", "");
-                }
-                else
-                {
-                    deathEvent.attacker = "Environment";
-                }                
-                deathEvent.weapon = (string)weapon;
-                deathEvent.headshot = (bool)headshot;
-                deathEvent.tick = (int)tick - this.starttick;
-                this.Deaths.Add(deathEvent);
+                UserInfo attacker = this.userInfo.FirstOrDefault(u => u.UserId == (int)attackerid);
+                deathEvent.attacker = attacker.Name.Replace("\0", "");
             }
+            else
+            {
+                deathEvent.attacker = "Environment";
+            }                
+            deathEvent.weapon = (string)weapon;
+            deathEvent.headshot = (bool)headshot;
+            deathEvent.tick = (int)tick - this.starttick;
+            this.Deaths.Add(deathEvent);
         }
     }
 

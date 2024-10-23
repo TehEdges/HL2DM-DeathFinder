@@ -88,13 +88,28 @@ public class serverInfo : PacketBase
     }
 }
 
-public class setPause(BitStream stream) : PacketBase(stream)
+public class setPause : PacketBase
 {
+    GameState state;
+    int msgtick;
+    public setPause (BitStream stream, GameState state, int msgtick) : base(stream)
+    {
+        this.state = state;
+        this.msgtick = msgtick;
+    }
     public bool paused;
 
     public override void Process()
     {
         this.paused = this.MessageData.ReadBoolean();
+        if(this.paused == true)
+        {
+            this.state.pausestarttick = this.msgtick;
+        }
+        else if(this.paused == false && this.state.pausestarttick != 0)
+        {
+            this.state.tickoffset = this.msgtick - this.state.pausestarttick;
+        }
     }
 }
 public class stringCmd(BitStream stream) : PacketBase(stream)
@@ -396,6 +411,7 @@ public class stringTablePackets : PacketBase
         StringTable temptable = new(this.TableName, this.maxEntries, this.userdatasize, this.userdatasizebits, this.isCompressed, tabledata);
         temptable.ProcessStringTable(this.entitycount);
         this.State.stringTables.Add(temptable);
+        this.State.ProcessStringTables(temptable);
     }
 }
 
