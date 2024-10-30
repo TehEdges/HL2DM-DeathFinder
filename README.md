@@ -23,7 +23,7 @@ Each generated CSV file includes two sections: **Deaths** and **Chat**.
 **Chat Section**  
 | Kind     | From   | Text                |
 |----------|--------|---------------------|
-| TeamChat | Player3| "Let's group up!"   |
+| TeamChat | Player3| "Orrrb PlAyERz lUl!"   |
 
 ### Headers Explanation
 - **Deaths Section**
