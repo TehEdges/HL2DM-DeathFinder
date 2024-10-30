@@ -38,11 +38,6 @@ Each generated CSV file includes two sections: **Deaths** and **Chat**.
   - `From`: Name of the player sending the message.
   - `Text`: Content of the message.
 
-## Installation and Requirements
-- **Programming Language**: C#
-- **Executable**: `HL2DM_Death_Finder.exe`
-- **Requirements**: .NET Framework or .NET Core compatible with your environment.
-
 ## Running the Program
 To run the program, open a command prompt or terminal, navigate to the directory containing `HL2DM_Death_Finder.exe`, and use the following command format:
 
