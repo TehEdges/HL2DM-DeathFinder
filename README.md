@@ -6,6 +6,9 @@
 - **Death Event Extraction**: Captures information about player deaths, including attacker, victim, weapon, headshot status, and game tick.
 - **Chat Message Extraction**: Extracts chat messages with details such as type, sender, and message content.
 
+## Runtime Requirements
+- **Requirement**: .NET 8.0 Runtime or later
+
 ## Usage
 The program takes two arguments:
 1. **Input Directory**: Directory containing the `.dem` files.
