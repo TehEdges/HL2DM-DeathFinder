@@ -13,6 +13,7 @@
 The program takes two arguments:
 1. **Input Directory**: Directory containing the `.dem` files.
 2. **Output Directory**: Directory where the parsed CSV files will be saved.
+3. **Save Chat**: True to save the chat to the csv, false to not save the chat.
 
 Each generated CSV file includes two sections: **Deaths** and **Chat**.
 
@@ -31,7 +32,9 @@ Each generated CSV file includes two sections: **Deaths** and **Chat**.
 ### Headers Explanation
 - **Deaths Section**
   - `Attacker`: Player responsible for the kill.
+  - `AttackerSteamID`: Steam ID of the attacker.
   - `Victim`: Player who was killed.
+  - 'VictimSteamID`: Steam ID of the victim.
   - `Weapon`: Weapon used.
   - `Headshot`: Whether the kill was a headshot.
   - `Tick`: Game tick when the kill happened.
