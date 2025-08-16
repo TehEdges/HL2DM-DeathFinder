@@ -34,7 +34,7 @@ Each generated CSV file includes two sections: **Deaths** and **Chat**.
   - `Attacker`: Player responsible for the kill.
   - `AttackerSteamID`: Steam ID of the attacker.
   - `Victim`: Player who was killed.
-  - 'VictimSteamID`: Steam ID of the victim.
+  - `VictimSteamID`: Steam ID of the victim.
   - `Weapon`: Weapon used.
   - `Headshot`: Whether the kill was a headshot.
   - `Tick`: Game tick when the kill happened.
@@ -48,4 +48,4 @@ Each generated CSV file includes two sections: **Deaths** and **Chat**.
 To run the program, open a command prompt or terminal, navigate to the directory containing `HL2DM_Death_Finder.exe`, and use the following command format:
 
 ```shell
-HL2DM_Death_Finder.exe "path\to\input\dem\files" "path\to\output\csv\files"
+HL2DM_Death_Finder.exe "path\to\input\dem\files" "path\to\output\csv\files" true
