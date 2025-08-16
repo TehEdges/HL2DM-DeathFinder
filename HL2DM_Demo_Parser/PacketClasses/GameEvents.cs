@@ -10,6 +10,7 @@ public enum GameEventTypes
     server_cvar = 3,
     round_start = 37,
     player_death = 23,
+    player_hurt = 24,
     mm_lobby_member_join = 72
 }
 public enum GameEventValueType

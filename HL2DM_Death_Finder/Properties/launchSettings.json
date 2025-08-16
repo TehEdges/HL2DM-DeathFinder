@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "HL2DM_Death_Finder": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\temp C:\\temp true"
+    }
+  }
+}

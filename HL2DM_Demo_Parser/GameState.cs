@@ -39,10 +39,12 @@ public class GameState
             Event.Values.TryGetValue("tick", out object tick);
             UserInfo victim = this.userInfo.FirstOrDefault(u => u.UserId == (int)victimid);
             deathEvent.victim = victim.Name.Replace("\0", "");
+            deathEvent.victimsteamid = victim.SteamId;
             if((int)attackerid != 0)
             {
                 UserInfo attacker = this.userInfo.FirstOrDefault(u => u.UserId == (int)attackerid);
                 deathEvent.attacker = attacker.Name.Replace("\0", "");
+                deathEvent.attackersteamid = attacker.SteamId;
             }
             else
             {
@@ -137,7 +139,7 @@ public class UserInfo
 
 public class DeathEvent
 {
-    public string attacker, victim, weapon;
+    public string attacker, victim, weapon, attackersteamid, victimsteamid;
     public int tick;
     public bool headshot;
 }
